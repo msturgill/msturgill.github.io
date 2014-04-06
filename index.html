@@ -1,5 +1,8 @@
-PowerDNS DNSSEC Authoritative Nameserver
+<h1>Notes and Tutorials</h1>
 
+<h3>PowerDNS DNSSEC Authoritative Nameserver</h3>
+
+<p>
 Install dependencies (varies with environment):
 <pre>aptitude install build-essential libboost-dev libboost-program-options-dev libboost-serialization-dev libbotan1.10-dev libmysqlclient-dev</pre>
 Extract and enter source directory:
@@ -163,9 +166,11 @@ View DS records and update them with the domain's registrar:
 <pre>
 /opt/pdns/bin/pdnssec show-zone example.com
 </pre>
+</p>
 
-strongSwan IKEv2 IPSec VPN
+<h3>strongSwan IKEv2 IPSec VPN</h3>
 
+<p>
 Install build tools and prerequisites (varies with environment):
 <pre>aptitude install build-essential libgmp3-dev libssl-dev libcurl4-gnutls-dev</pre>
 Fetch source, extract, configure, and build. There are extensive <a title="build options" href="http://wiki.strongswan.org/projects/strongswan/wiki/Autoconf">build options</a> available. strongSwan is installed to /opt/strongswan:
@@ -229,3 +234,4 @@ Additional References:
 <a href="http://wiki.strongswan.org/projects/strongswan/wiki/IKEv2Examples">http://wiki.strongswan.org/projects/strongswan/wiki/IKEv2Examples</a>
 <a href="http://wiki.strongswan.org/projects/strongswan/wiki/UserDocumentation">http://wiki.strongswan.org/projects/strongswan/wiki/UserDocumentation</a>
 <a href="http://wiki.strongswan.org/projects/strongswan/wiki/Autoconf">http://wiki.strongswan.org/projects/strongswan/wiki/Autoconf</a>
+</p>
