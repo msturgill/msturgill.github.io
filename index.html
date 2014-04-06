@@ -1,237 +1,74 @@
-<h1>Notes and Tutorials</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-<h3>PowerDNS DNSSEC Authoritative Nameserver</h3>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-<p>
-Install dependencies (varies with environment):
-<pre>aptitude install build-essential libboost-dev libboost-program-options-dev libboost-serialization-dev libbotan1.10-dev libmysqlclient-dev</pre>
-Extract and enter source directory:
-<pre>wget http://downloads.powerdns.com/releases/pdns-3.2.tar.gz
-tar zxf pdns-3.2.tar.gz
-cd pdns-3.2/</pre>
-Configure, build, and install:
-<pre>./configure --prefix=/opt/pdns --enable-pdns_server --enable-botan1.10 --without-system-polarssl --without-lua --with-modules="gmysql"
-make &amp;&amp; make install</pre>
-Enter a MySQL instance and create the necessary database, user, and tables:
-<pre>mysql&gt; create database pdns;
-Query OK, 1 row affected (0.00 sec)
-mysql&gt; grant all on pdns.* to pdns@localhost identified by 'password';
-Query OK, 0 rows affected (0.00 sec)
-mysql&gt; use pdns;
-Database changed</pre>
-<pre>create table domains (
- id INT auto_increment,
- name VARCHAR(255) NOT NULL,
- master VARCHAR(128) DEFAULT NULL,
- last_check INT DEFAULT NULL,
- type VARCHAR(6) NOT NULL,
- notified_serial INT DEFAULT NULL, 
- account VARCHAR(40) DEFAULT NULL,
- primary key (id)
-) Engine=InnoDB;
-CREATE UNIQUE INDEX name_index ON domains(name);
-CREATE TABLE records (
- id INT auto_increment,
- domain_id INT DEFAULT NULL,
- name VARCHAR(255) DEFAULT NULL,
- type VARCHAR(10) DEFAULT NULL,
- content VARCHAR(64000) DEFAULT NULL,
- ttl INT DEFAULT NULL,
- prio INT DEFAULT NULL,
- change_date INT DEFAULT NULL,
- primary key(id),
- CONSTRAINT `records_ibfk_1` FOREIGN KEY (`domain_id`) REFERENCES `domains` (`id`) ON DELETE CASCADE
-) Engine=InnoDB;
-CREATE INDEX rec_name_index ON records(name);
-CREATE INDEX nametype_index ON records(name,type);
-CREATE INDEX domain_id ON records(domain_id);
-create table supermasters (
- ip VARCHAR(25) NOT NULL, 
- nameserver VARCHAR(255) NOT NULL, 
- account VARCHAR(40) DEFAULT NULL
-) Engine=InnoDB;
-create table domainmetadata (
- id INT auto_increment,
- domain_id INT NOT NULL,
- kind VARCHAR(16),
- content TEXT,
- primary key(id)
-);
-create index domainmetaidindex on domainmetadata(domain_id);               
-create table cryptokeys (
- id INT auto_increment,
- domain_id INT NOT NULL,
- flags INT NOT NULL,
- active BOOL,
- content TEXT,
- primary key(id)
-);
-create index domainidindex on cryptokeys(domain_id);           
-alter table records add ordername VARCHAR(255) BINARY;
-alter table records add auth bool;
-create index recordorder on records (domain_id, ordername);
-create table tsigkeys (
- id INT auto_increment,
- name VARCHAR(255), 
- algorithm VARCHAR(50),
- secret VARCHAR(255),
- primary key(id)
-);
-create unique index namealgoindex on tsigkeys(name, algorithm);
-alter table records change column type type VARCHAR(10);</pre>
+    <title>Mark Sturgill by msturgill</title>
+  </head>
 
-When finished with MySQL operations, flush privileges:
-<pre>
-mysql> flush privileges;
-Query OK, 0 rows affected (0.00 sec)
-</pre>
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Mark Sturgill</h1>
+        <h2></h2>
+        <a href="https://github.com/msturgill" class="button"><small>Follow me on</small>GitHub</a>
+      </div>
+    </header>
 
-Edit the stock PowerDNS configuration file /opt/pdns/etc/pdns.conf-dist and save it as /opt/pdns/etc/pdns.conf. The following changes are a guideline:
-<pre>
-daemon=yes
-master=yes
-launch=gmysql
-gmysql-dnssec
-gmysql-socket=/var/run/mysqld/mysqld.sock
-#gmysql-host=localhost
-gmysql-user=pdns
-gmysql-password=secret
-gmysql-dbname=pdns
-</pre>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h3>
+<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-PowerDNS creates an init script as part of its build process. You can install it on a Debian based system by doing the following:
-<pre>
-cp /opt/pdns-3.2/pdns/pdns /etc/init.d/
-update-rc.d pdns defaults
-</pre>
+<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
 
-If you wish to remove it:
-<pre>
-update-rc.d -f pdns remove
-rm /etc/init.d/pdns
-</pre>
+<pre><code>$ cd your_repo_root/repo_name
+$ git fetch origin
+$ git checkout gh-pages
+</code></pre>
 
-Start the PowerDNS server:
-<pre>
-service pdns start
-</pre>
+<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
 
-Create a domain and associated records in the database:
-<pre>
-insert into domains (name, type) values ('example.com','MASTER');
-insert into records (domain_id, name, content, type, ttl) values (1, 'example.com','localhost dns@example.com 0', 'SOA', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'example.com','203.0.113.1', 'A', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'example.com','2001:DB8:1:1::1', 'AAAA', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'www.example.com','example.com', 'CNAME', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'ns1.example.com','203.0.113.1', 'A', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'ns1.example.com','2001:DB8:1:1::1', 'AAAA', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'ns2.example.com','192.0.2.2', 'A', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'ns2.example.com','2001:DB8::2', 'AAAA', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'example.com','ns1.example.com', 'NS', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'example.com','ns2.example.com', 'NS', 86400);
-</pre>
+<h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
 
-Create MX, SPF, and DKIM records. If you are using Google Apps, you will likely want records similar to the following:
-<pre>
-insert into records (domain_id, name, content, type, ttl) values (1, 'google._domainkey.example.com','v=DKIM1; k=rsa; p=dkim-key', 'TXT', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'example.com','v=spf1 include:_spf.google.com ~all', 'TXT', 86400);
-insert into records (domain_id, name, content, type, ttl) values (1, 'example.com','google-site-verification=site-verification-key', 'TXT', 86400);
-insert into records (domain_id, name, content, type, ttl, prio) values (1, 'example.com','ASPMX.L.GOOGLE.COM', 'MX', 86400, 1);
-insert into records (domain_id, name, content, type, ttl, prio) values (1, 'example.com','ALT1.ASPMX.L.GOOGLE.COM', 'MX', 86400, 5);
-insert into records (domain_id, name, content, type, ttl, prio) values (1, 'example.com','ALT2.ASPMX.L.GOOGLE.COM', 'MX', 86400, 5);
-insert into records (domain_id, name, content, type, ttl, prio) values (1, 'example.com','ASPMX2.GOOGLEMAIL.COM', 'MX', 86400, 10);
-insert into records (domain_id, name, content, type, ttl, prio) values (1, 'example.com','ASPMX3.GOOGLEMAIL.COM', 'MX', 86400, 10);
-</pre>
+<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
 
-Allow slaves to AXFR your domain:
-<pre>
-insert into domainmetadata (domain_id, kind, content) values (1, 'ALLOW-AXFR-FROM','192.0.2.2');
-insert into domainmetadata (domain_id, kind, content) values (1, 'ALLOW-AXFR-FROM','2001:DB8::2');
-</pre>
+<h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
 
-Using 0 as the serial in the SOA above has PowerDNS generate the serial as needed. INCEPTION-EPOCH modifies that generation to use the greater of the last modified time or the time of the current signing period.
-<pre>
-insert into domainmetadata (domain_id, kind, content) values (1, 'SOA-EDIT','INCEPTION-EPOCH');
-update records set change_date = unix_timestamp() where domain_id = 1;
-</pre>
+<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
 
-Activate DNSSEC and NSEC3:
-<pre>
-/opt/pdns/bin/pdnssec secure-zone example.com
-/opt/pdns/bin/pdnssec set-nsec3 example.com
-/opt/pdns/bin/pdnssec rectify-zone example.com
-</pre>
+<h3>
+<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
-View DS records and update them with the domain's registrar:
-<pre>
-/opt/pdns/bin/pdnssec show-zone example.com
-</pre>
-</p>
+<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
 
-<h3>strongSwan IKEv2 IPSec VPN</h3>
+<h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
 
-<p>
-Install build tools and prerequisites (varies with environment):
-<pre>aptitude install build-essential libgmp3-dev libssl-dev libcurl4-gnutls-dev</pre>
-Fetch source, extract, configure, and build. There are extensive <a title="build options" href="http://wiki.strongswan.org/projects/strongswan/wiki/Autoconf">build options</a> available. strongSwan is installed to /opt/strongswan:
-<pre>cd /opt
-wget http://download.strongswan.org/strongswan-5.1.1.tar.bz2
-tar jxf strongswan-5.1.1.tar.bz2
-cd strongswan-5.1.1/
-./configure --prefix=/opt/strongswan --enable-md4 --enable-eap-md5 --enable-eap-gtc --enable-eap-tls --enable-eap-ttls --enable-eap-peap --enable-eap-mschapv2 --enable-eap-identity --enable-ikev2 --enable-openssl --enable-curl --enable-af-alg
-make &amp;&amp; make install
-cd /opt/strongswan/etc</pre>
-Modify the three basic configuration files as necessary.
-<pre># ipsec.conf
-config setup
-conn %default
-    keyexchange=ikev2
-    ike=aes256-sha1-modp1024!
-    esp=aes256-sha1!
-    dpdaction=clear
-    dpddelay=300s
-    rekey=no
-conn windows
-    left=%any
-    leftsubnet=0.0.0.0/0
-    leftauth=pubkey
-    leftcert=vpnCert.der
-    leftid=@vpn.example.com
-    right=%any
-    rightsourceip=172.16.16.0/24
-    rightauth=eap-mschapv2
-    rightsendcert=never
-    eap_identity=%any
-    auto=add</pre>
-<pre># ipsec.secrets
-: RSA vpnKey.der
-username : EAP "password"</pre>
-<pre># strongswan.conf
-charon {
-    dns1 = 8.8.4.4
-    dns2 = 8.8.8.8
-}</pre>
-Create basic PKI (CA and server certificate). The following commands need to be modified slightly to suit your environment. This process easier if you have an actual domain to use. You can use hostnames and modify the hosts file on clients if necessary.
-<pre>/opt/strongswan/sbin/ipsec pki --gen &gt; /opt/strongswan/etc/ipsec.d/private/caKey.der
-/opt/strongswan/sbin/ipsec pki --self --in /opt/strongswan/etc/ipsec.d/private/caKey.der --dn "C=US, O=YourORG, CN=YourORG CA" --ca &gt; /opt/strongswan/etc/ipsec.d/cacerts/caCert.der
-/opt/strongswan/sbin/ipsec pki --gen &gt; /opt/strongswan/etc/ipsec.d/private/vpnKey.der
-/opt/strongswan/sbin/ipsec pki --pub --in /opt/strongswan/etc/ipsec.d/private/vpnKey.der | /opt/strongswan/sbin/ipsec pki --issue --cacert /opt/strongswan/etc/ipsec.d/cacerts/caCert.der --cakey caKey.der --dn "C=US, O=YourORG, CN=vpn.example.com" --san vpn.example.com --flag serverAuth --flag ikeIntermediate &gt; /opt/strongswan/etc/ipsec.d/certs/vpnCert.der</pre>
-You'll need to copy your CA to your Windows clients and import it. You'll have to use the 'Certificates' MMC snap-in. There is an overview and screenshots of this process <a title="here" href="http://wiki.strongswan.org/projects/strongswan/wiki/Win7EapCert">here</a>. It is easier to copy and paste base64. The following will convert your certificate into a format that is easier to shuffle around.
-<pre>openssl x509 -inform der -in caCert.der -out caCert.pem</pre>
-Ensure IP forwarding is enabled.
-<pre># /etc/sysctl.conf
-net.ipv4.ip_forward=1
-sysctl -p /etc/sysctl.conf</pre>
-NAT traffic originating from VPN clients.
-<pre>iptables -t nat -A POSTROUTING -s 172.16.16.0/24 -o eth0 -j MASQUERADE</pre>
-Start strongSwan.
-<pre>/opt/strongswan/sbin/ipsec start</pre>
-Additional References:
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+        </section>
 
-<a href="http://wiki.strongswan.org/projects/strongswan/wiki/Windows7">http://wiki.strongswan.org/projects/strongswan/wiki/Windows7</a>
-<a href="http://wiki.strongswan.org/projects/strongswan/wiki/Win7CertReq">http://wiki.strongswan.org/projects/strongswan/wiki/Win7CertReq</a>
-<a href="http://wiki.strongswan.org/projects/strongswan/wiki/Win7EapCert">http://wiki.strongswan.org/projects/strongswan/wiki/Win7EapCert</a>
-<a href="http://wiki.strongswan.org/projects/strongswan/wiki/IKEv2Examples">http://wiki.strongswan.org/projects/strongswan/wiki/IKEv2Examples</a>
-<a href="http://wiki.strongswan.org/projects/strongswan/wiki/UserDocumentation">http://wiki.strongswan.org/projects/strongswan/wiki/UserDocumentation</a>
-<a href="http://wiki.strongswan.org/projects/strongswan/wiki/Autoconf">http://wiki.strongswan.org/projects/strongswan/wiki/Autoconf</a>
-</p>
+        <aside id="sidebar">
+
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
