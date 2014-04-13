@@ -1,0 +1,69 @@
+==================================================================
+https://keybase.io/msturgill
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://vsrc.net
+  * I am msturgill (https://keybase.io/msturgill) on keybase.
+  * I have a public key with fingerprint BD48 E2F2 B8E9 C35A 3E7A  2775 6799 DA44 1735 958F
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "bd48e2f2b8e9c35a3e7a27756799da441735958f",
+            "host": "keybase.io",
+            "key_id": "6799DA441735958F",
+            "uid": "8489d4ef3be724d9691e14f7fe0c0b00",
+            "username": "msturgill"
+        },
+        "service": {
+            "hostname": "vsrc.net",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1397387078,
+    "expire_in": 157680000,
+    "prev": "fd94e96f53f5f8fda4655d35bb144f49a5569c71c40b03b319b9a12895bd3468",
+    "seqno": 3,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.4.14 (GNU/Linux)
+
+owGbwMvMwMSYPvOWi7jp1H7G0wfeJzEEe+W7VSsl5adUKllVK2Wngqm0zLz01KKC
+osy8EiUrpaQUE4tUozSjJItUy2Rj00TjVPNEI3NzUzNzS8uURBMTQ3NjU0tTizQl
+HaWM/GKQDqAxSYnFqXqZ+UAxICc+MwUoClLv4ghX7waUKwVLWJhYWKaYpKYZJ6Wa
+G5mkWJpZGqYamqSZp6UaJBskGRiAFBanFuUl5qYCVecWl5QWpWfm5CjV6igBhcsy
+k1NBjgbZDVVSVlyUrJeXWgLUWFCUX5KfnJ8DFM0oKSkotgLpKqksACkrT02KhxoQ
+n5SZlwL0NVBHWWpRcWZ+npKVIVBlckkmyERDY0tzYwtzA3MLHaXUioLMotT4TJAK
+U3MzCwMgANmTWgY0Mi3F0iTV0izN1DjNNM0iDRg8ZqamKcamSUmGJiZpJpaJpqZm
+lsnmhskmQI8ZJxkbWiZZJhoaWViaJqUYm5hZKIG8VJiXr2RlDHRmYjrQyOLM9LxE
+oJdTlWo7mWRYGBiZGNhYmUDxxsDFKQCLzTkr+f+Hbbq18NykY2t/33Nf+6Ary+Xd
+/KhQ6zUzn3yO2c348ozRfvFTyzkknh6T+v+vYp+094mEiRKvNa/pJGk38bTobfvE
+O3WKypkDFhP/+Rz9seheu9LE3sfPp8b9tHrEmv7Y85h427ZT739HzD97olTdjU1w
+19v1k6Kj267O4jyibypqoMCiX8pjpRljedPUz9ZC59NV8ZmlVrqJ2WuYUryl/qX/
+aWwwfa4xy1CO+dScLKEeBZvYVE+ZHcuVn7OFPhIKnP6hf/7L/iAh6fmmLkXXdCOu
+vnXkyChXU7v2maU2+tWzdf+fLK/xNd454ZGbi2zQxYNPpO5k+u/o/nBk89TSuN53
+v7kK/wm6/NodEvElx6VnwVGR9ItVq8p3WnIsv23jqjXTpW/fPKccLn2xl3YPP0ZI
+dS1mOysZUr6kZtql0E0hVxcZLX1V4KqYLRd4ydLxfTVP3oLIHcwdq2JfB4j7zxac
+wLJKqTSiW2FaSMsyFa2t273qUxf2zbBStllzbTm364VmUY1gjuvpFZuitm47suTv
+vh9Ja/0bNB24vh69La56u3eSVqs2xza92W+/hvz29f03fcPvAzWc9ssMhConFbyX
+OjtxTf/eZ3Ur+p5fclJetUfOxmGejnfpLytNd6WAV9lGBmujFQ/N/6H/4lqg1bu3
+jwXXhbDvK/zxZTEDj2umS/kc7zfKC0KP+gixB4iu2JOjqM3kMt9092IA
+=/3Qf
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/msturgill
+
+==================================================================
