@@ -265,7 +265,7 @@ charon {
 <div class="highlight highlight-sh"><pre>/opt/strongswan/sbin/ipsec pki --gen &gt; /opt/strongswan/etc/ipsec.d/private/caKey.der
 /opt/strongswan/sbin/ipsec pki --self --in /opt/strongswan/etc/ipsec.d/private/caKey.der --dn <span class="s2">"C=US, O=YourORG, CN=YourORG CA"</span> --ca &gt; /opt/strongswan/etc/ipsec.d/cacerts/caCert.der
 /opt/strongswan/sbin/ipsec pki --gen &gt; /opt/strongswan/etc/ipsec.d/private/vpnKey.der
-/opt/strongswan/sbin/ipsec pki --pub --in /opt/strongswan/etc/ipsec.d/private/vpnKey.der <span class="p">|</span> /opt/strongswan/sbin/ipsec pki --issue --cacert /opt/strongswan/etc/ipsec.d/cacerts/caCert.der --cakey caKey.der --dn <span class="s2">"C=US, O=YourORG, CN=vpn.example.com"</span> --san vpn.example.com --flag serverAuth --flag ikeIntermediate &gt; /opt/strongswan/etc/ipsec.d/certs/vpnCert.der
+/opt/strongswan/sbin/ipsec pki --pub --in /opt/strongswan/etc/ipsec.d/private/vpnKey.der <span class="p">|</span> /opt/strongswan/sbin/ipsec pki --issue --cacert /opt/strongswan/etc/ipsec.d/cacerts/caCert.der --cakey /opt/strongswan/etc/ipsec.d/private/caKey.der --dn <span class="s2">"C=US, O=YourORG, CN=vpn.example.com"</span> --san vpn.example.com --flag serverAuth --flag ikeIntermediate &gt; /opt/strongswan/etc/ipsec.d/certs/vpnCert.der
 </pre></div>
 
 <p>You'll need to copy your CA to your Windows clients and import it. You'll have to use the 'Certificates' MMC snap-in. There is an overview and screenshots of this process here. It is easier to copy and paste base64. The following will convert your certificate into a format that is easier to shuffle around.</p>
