@@ -217,9 +217,9 @@ rm /etc/init.d/pdns
 <p>Fetch source, extract, configure, and build. There are extensive build options available. strongSwan is installed to /opt/strongswan:</p>
 
 <div class="highlight highlight-sh"><pre><span class="nb">cd</span> /opt
-wget http://download.strongswan.org/strongswan-5.1.1.tar.bz2
-tar jxf strongswan-5.1.1.tar.bz2
-<span class="nb">cd </span>strongswan-5.1.1/
+wget http://download.strongswan.org/strongswan-5.1.3.tar.bz2
+tar jxf strongswan-5.1.3.tar.bz2
+<span class="nb">cd </span>strongswan-5.1.3/
 ./configure --prefix<span class="o">=</span>/opt/strongswan --enable-md4 --enable-eap-md5 --enable-eap-gtc --enable-eap-tls --enable-eap-ttls --enable-eap-peap --enable-eap-mschapv2 --enable-eap-identity --enable-ikev2 --enable-openssl --enable-curl --enable-af-alg
 make <span class="o">&amp;&amp;</span> make install
 <span class="nb">cd</span> /opt/strongswan/etc
